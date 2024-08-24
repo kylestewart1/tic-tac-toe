@@ -9,13 +9,17 @@ function Board() {
         }
     }
 
+    const fill = (row, column, player) => {
+        board[row][column].fill(player);
+    }
+
     const getBoard = () => board;
 
     const printBoard = () => {
         console.log(board.map(row => row.map(cell => cell.getValue())));
     }
 
-    return { getBoard, printBoard };
+    return { getBoard, printBoard, fill };
 }
 
 
@@ -43,10 +47,24 @@ function Game() {
         Player("Xzibit", "X"),
         Player("Odawg", "O")
     ];
+
+    
+    let round = 0;
+
+    const playRound = (row, column) => {
+        const player = players[round % 2];
+        board.fill(row, column, player);
+        board.printBoard();
+        round++;
+    }
+
+    return { playRound };
 }
 
 
-const board = Board();
-board.printBoard();
+const game = Game();
+game.playRound(0,0);
+game.playRound(1,1);
+
 
 
