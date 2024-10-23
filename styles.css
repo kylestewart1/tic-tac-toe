@@ -2,3 +2,60 @@
     margin: 0;
     padding: 0;
 }
+
+body {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-rows: 1fr 4fr;
+    justify-items: center;
+    align-items: center;
+    
+}
+
+.X {
+    background-image: url("dmx.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.O {
+    background-image: url("o.jpeg");
+}
+
+.header {
+    display: grid;
+    grid-template-rows: 1fr 3fr;
+    gap: 10px;
+    justify-items: center;
+}
+
+#info {
+    width: 600px;
+    background-color: white;
+}
+
+.game-board {
+    height: 700px;
+    width: 800px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.cell {
+    background-color: white;
+    font-size: 10rem;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    opacity: 0.8;
+    border: none;
+}
+
+.cell:hover {
+    background-color: aqua;
+    cursor: pointer;
+}
+

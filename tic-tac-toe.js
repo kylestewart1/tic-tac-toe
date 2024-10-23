@@ -9,8 +9,12 @@ function Board() {
         }
     }
 
-    const fill = (row, column, player) => {
-        board[row][column].fill(player);
+    const fill = (row, column, symbol) => {
+        const validMove = (board[row][column].getValue() === null);
+        if (validMove) {
+            board[row][column].fill(symbol);
+        }
+        return validMove;
     }
 
     const getBoard = () => board;
@@ -26,8 +30,8 @@ function Board() {
 function Cell() {
     let value = null;
 
-    const fill = (player) => {
-        value = player.getSymbol();
+    const fill = (symbol) => {
+        value = symbol;
     }
 
     const getValue = () => value;
@@ -41,30 +45,67 @@ function Player(name, symbol) {
     return { getName, getSymbol };
 }
 
-function Game() {
+function GameController() {
     const board = Board();
     const players = [
         Player("Xzibit", "X"),
         Player("Odawg", "O")
     ];
 
-    
-    let round = 0;
 
-    const playRound = (row, column) => {
-        const player = players[round % 2];
-        board.fill(row, column, player);
+    const getBoard = board.getBoard;
+
+    const validMove = (row, column) => {
+        return board[row][column].getValue() === null;
+    }
+    
+    let activePlayer = players[0];
+
+    const getActivePlayer = () => activePlayer;
+
+    const printRoundInfo = () => {
         board.printBoard();
-        round++;
+        console.log(`${getActivePlayer().getName()}'s turn.`);
     }
 
-    return { playRound };
+    const switchPlayerTurn = () => {
+        activePlayer = (activePlayer === players[0]) ? players[1] : players[0];
+    }
+
+    const playRound = (row, column) => {
+        board.fill(row, column, getActivePlayer().getSymbol());
+        switchPlayerTurn();
+        printRoundInfo();
+    }
+
+    printRoundInfo();
+
+    return { getBoard, playRound, getActivePlayer };
+    
 }
 
 
-const game = Game();
-game.playRound(0,0);
-game.playRound(1,1);
+function ScreenController() {
+    const game = GameController();
+    const boardDiv = document.querySelector(".game-board");
 
+    const update = () => {
+        boardDiv.innerHTML = "";
 
+        const board = game.getBoard();
+        board.forEach(row => {
+            row.forEach((cell) => {
+                const cellButton = document.createElement("button");
+                cellButton.classList.add("cell");
+                cellButton.textContent = cell.getValue();
+                boardDiv.appendChild(cellButton);
+            })
+        })
+    }
+    update();
 
+    return { update };
+}
+
+const screen = ScreenController();
+screen.update();
