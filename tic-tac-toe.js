@@ -54,10 +54,11 @@ function GameController(xPlayerName, oPlayerName) {
 
 
     const getBoard = board.getBoard;
-
+    /*
     const validMove = (row, column) => {
         return board[row][column].getValue() === null;
     }
+    */
     
     let activePlayer = players.X;
 
@@ -74,7 +75,10 @@ function GameController(xPlayerName, oPlayerName) {
 
     const playRound = (row, column) => {
         console.log(getActivePlayer().getSymbol());
-        board.fill(row, column, getActivePlayer().getSymbol());
+        const validMove = board.fill(row, column, getActivePlayer().getSymbol());
+        if (!validMove) {
+            return;
+        }
         switchPlayerTurn();
         printRoundInfo();
     }
