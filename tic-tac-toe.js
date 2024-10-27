@@ -10,11 +10,7 @@ function Board() {
     }
 
     const fill = (row, column, symbol) => {
-        const validMove = (board[row][column].getValue() === null);
-        if (validMove) {
-            board[row][column].fill(symbol);
-        }
-        return validMove;
+        board[row][column].fill(symbol);
     }
 
     const getBoard = () => board;
@@ -66,6 +62,7 @@ function GameController(xPlayerName, oPlayerName) {
 
     const printRoundInfo = () => {
         board.printBoard();
+        console.log(getActivePlayer());
         console.log(`${getActivePlayer().getName()}'s turn.`);
     }
 
@@ -74,11 +71,11 @@ function GameController(xPlayerName, oPlayerName) {
     }
 
     const playRound = (row, column) => {
-        console.log(getActivePlayer().getSymbol());
-        const validMove = board.fill(row, column, getActivePlayer().getSymbol());
+        const validMove = (board.getBoard()[row][column].getValue() === null);
         if (!validMove) {
             return;
         }
+        board.fill(row, column, getActivePlayer().getSymbol());
         switchPlayerTurn();
         printRoundInfo();
     }
@@ -92,7 +89,7 @@ function GameController(xPlayerName, oPlayerName) {
 
 function ScreenController() {
     const body = document.querySelector("body");
-    const game = GameController();
+    const game = GameController("Xzibit", "Odawg");
     const boardDiv = document.querySelector(".game-board");
 
     const update = () => {
@@ -116,11 +113,9 @@ function ScreenController() {
     const clickHandlerBoard = (e) => {
         const row = e.target.dataset.row;
         const column = e.target.dataset.column;
-        console.log(`row ${row}, column ${column}`)
         if (!row || !column) {
             return;
         }
-
         game.playRound(row, column);
         update();
     }
