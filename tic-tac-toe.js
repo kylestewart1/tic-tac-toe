@@ -45,12 +45,12 @@ function Player(name, symbol) {
     return { getName, getSymbol };
 }
 
-function GameController() {
+function GameController(xPlayerName, oPlayerName) {
     const board = Board();
-    const players = [
-        Player("Xzibit", "X"),
-        Player("Odawg", "O")
-    ];
+    const players = {
+        X: Player(xPlayerName, "X"),
+        O: Player(oPlayerName, "O")
+    };
 
 
     const getBoard = board.getBoard;
@@ -59,7 +59,7 @@ function GameController() {
         return board[row][column].getValue() === null;
     }
     
-    let activePlayer = players[0];
+    let activePlayer = players.X;
 
     const getActivePlayer = () => activePlayer;
 
@@ -69,10 +69,11 @@ function GameController() {
     }
 
     const switchPlayerTurn = () => {
-        activePlayer = (activePlayer === players[0]) ? players[1] : players[0];
+        activePlayer = (activePlayer === players.X) ? players.O : players.X;
     }
 
     const playRound = (row, column) => {
+        console.log(getActivePlayer().getSymbol());
         board.fill(row, column, getActivePlayer().getSymbol());
         switchPlayerTurn();
         printRoundInfo();
@@ -93,19 +94,34 @@ function ScreenController() {
         boardDiv.innerHTML = "";
 
         const board = game.getBoard();
-        board.forEach(row => {
-            row.forEach((cell) => {
+        board.forEach((row, rowNum) => {
+            row.forEach((cell, column) => {
                 const cellButton = document.createElement("button");
                 cellButton.classList.add("cell");
+
+                cellButton.dataset.row = rowNum;
+                cellButton.dataset.column = column; 
                 cellButton.textContent = cell.getValue();
                 boardDiv.appendChild(cellButton);
             })
         })
     }
+
+    const clickHandlerBoard = (e) => {
+        const row = e.target.dataset.row;
+        const column = e.target.dataset.column;
+        console.log(`row ${row}, column ${column}`)
+        if (!row || !column) {
+            return;
+        }
+
+        game.playRound(row, column);
+        update();
+    }
+
+    boardDiv.addEventListener("click", clickHandlerBoard);
     update();
 
-    return { update };
 }
 
 const screen = ScreenController();
-screen.update();
