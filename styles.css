@@ -54,7 +54,7 @@ body {
     border: none;
 }
 
-.cell:hover {
+.active:hover {
     background-color: aqua;
     cursor: pointer;
 }
