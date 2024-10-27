@@ -109,7 +109,7 @@ function GameController(xPlayerName, oPlayerName) {
                 return players.X;
             } else if (Math.min(...scores[key]) == -3) {
                 return players.O;
-            } 
+            }
         }
         return null;
     }
@@ -122,11 +122,18 @@ function GameController(xPlayerName, oPlayerName) {
         board.fill(row, column, getActivePlayer().getSymbol());
         const scores = calcScores();
         const winner = checkWinner(scores);
-        if (winner) {
-            return true;
-        }
-        switchPlayerTurn();
+        const tie = !(board.getBoard().flat().map(cell => cell.getValue()).includes(null));
+        console.log(board.getBoard)
         printRoundInfo();
+
+        if (winner) {
+            return winner;
+        } else if (tie) {
+            return tie;
+        } else {
+            switchPlayerTurn();
+        }
+        
     }
 
     printRoundInfo();
@@ -170,7 +177,7 @@ function ScreenController() {
                 return;
             }
             gameOver = game.playRound(row, column);
-            
+
             update();
         } 
     }
