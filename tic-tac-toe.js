@@ -87,10 +87,12 @@ function GameController(xPlayerName, oPlayerName) {
 
 
 function ScreenController() {
+    const body = document.querySelector("body");
     const game = GameController();
     const boardDiv = document.querySelector(".game-board");
 
     const update = () => {
+        body.classList = [game.getActivePlayer().getSymbol()];
         boardDiv.innerHTML = "";
 
         const board = game.getBoard();
