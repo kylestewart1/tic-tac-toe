@@ -19,7 +19,9 @@ function Board() {
         console.log(board.map(row => row.map(cell => cell.getValue())));
     }
 
-    return { getBoard, printBoard, fill };
+    const clear = () => board.map(row => row.map(cell => cell.clear()));
+
+    return { getBoard, printBoard, fill, clear };
 }
 
 
@@ -32,7 +34,9 @@ function Cell() {
 
     const getValue = () => value;
 
-    return { getValue, fill };
+    const clear = () => fill(null);
+
+    return { getValue, fill, clear };
 }
 
 function Player(name, symbol) {
@@ -129,22 +133,30 @@ function GameController(xPlayerName, oPlayerName) {
         
     }
 
-    return { getBoard, playRound, getActivePlayer };
+    const newGame = board.clear;
+
+    return { getBoard, playRound, getActivePlayer, newGame };
     
 }
 
 
-function ScreenController() {
-    const namesDialog = document.getElementById("names-dialog");
-    namesDialog.showModal();
+function ScreenController(playerXName, playerOName) {
 
+    const game = GameController(playerXName, playerOName);
     const body = document.querySelector("body");
     const infoDiv = document.querySelector("#info");
-    const game = GameController("Xzibit", "Odawg");
     const boardDiv = document.querySelector(".game-board");
     let gameOver = false;
 
+
     const newGameButton = document.getElementById("new-game-btn");
+
+    newGameButton.addEventListener("click", () => {
+        gameOver = false;
+        game.newGame();
+        infoDiv.textContent = "";
+        update();
+    })
 
     const update = () => {
         body.classList = [game.getActivePlayer().getSymbol()];
@@ -187,6 +199,7 @@ function ScreenController() {
         } else {
             infoDiv.textContent = `${gameOver} wins!`;
         }
+        newGameButton.style.display = "block";
     }
 
     boardDiv.addEventListener("click", clickHandlerBoard);
@@ -194,4 +207,8 @@ function ScreenController() {
 
 }
 
-const screen = ScreenController();
+
+
+const playerXName = prompt("Enter Player X Name:");
+const playerOName = prompt("Enter Player O Name:")
+const screen = ScreenController(playerXName, playerOName);

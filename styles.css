@@ -65,31 +65,3 @@ body {
 #new-game-btn {
     display: none;
 }
-
-dialog {
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    position: absolute;
-    height: 300px;
-    width: 500px;
-  }
-
-  form {
-    width: 60%;
-    height: 80%;
-    margin-left: 20%;
-    margin-top: 5%;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 2fr 2fr 1fr;
-    align-items: center;
-    justify-items: center;
-  }
-
-  #start-game-btn {
-    width: 100px;
-    height: 30px
-  }
