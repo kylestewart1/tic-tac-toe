@@ -50,11 +50,6 @@ function GameController(xPlayerName, oPlayerName) {
 
 
     const getBoard = board.getBoard;
-    /*
-    const validMove = (row, column) => {
-        return board[row][column].getValue() === null;
-    }
-    */
     
     let activePlayer = players.X;
 
@@ -123,20 +118,16 @@ function GameController(xPlayerName, oPlayerName) {
         const scores = calcScores();
         const winner = checkWinner(scores);
         const tie = !(board.getBoard().flat().map(cell => cell.getValue()).includes(null));
-        console.log(board.getBoard)
-        printRoundInfo();
 
         if (winner) {
-            return winner;
+            return winner.getName();
         } else if (tie) {
-            return tie;
+            return "Tie";
         } else {
             switchPlayerTurn();
         }
         
     }
-
-    printRoundInfo();
 
     return { getBoard, playRound, getActivePlayer };
     
@@ -144,10 +135,16 @@ function GameController(xPlayerName, oPlayerName) {
 
 
 function ScreenController() {
+    const namesDialog = document.getElementById("names-dialog");
+    namesDialog.showModal();
+
     const body = document.querySelector("body");
+    const infoDiv = document.querySelector("#info");
     const game = GameController("Xzibit", "Odawg");
     const boardDiv = document.querySelector(".game-board");
     let gameOver = false;
+
+    const newGameButton = document.getElementById("new-game-btn");
 
     const update = () => {
         body.classList = [game.getActivePlayer().getSymbol()];
@@ -167,6 +164,9 @@ function ScreenController() {
                 boardDiv.appendChild(cellButton);
             })
         })
+        if (gameOver) {
+            winScreen();
+        }
     }
 
     const clickHandlerBoard = (e) => {
@@ -177,9 +177,16 @@ function ScreenController() {
                 return;
             }
             gameOver = game.playRound(row, column);
-
             update();
         } 
+    }
+
+    const winScreen = () => {
+        if (gameOver === "Tie") {
+            infoDiv.textContent = "Tie!";
+        } else {
+            infoDiv.textContent = `${gameOver} wins!`;
+        }
     }
 
     boardDiv.addEventListener("click", clickHandlerBoard);

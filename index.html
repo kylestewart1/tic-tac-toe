@@ -6,10 +6,19 @@
     <link rel="stylesheet" href="styles.css">
     <title>Tic Tac Toe</title>
 </head>
+
 <body class="O">
+    <dialog id="names-dialog">
+        <form>
+            <label for="player-X-name">X Player Name: <input name="player-X-name" type="text" required autofocus/></label>
+            <label for="player-O-name">O Player Name: <input name="player-O-name" type="text" required/></label>
+            <button type="submit" id="start-game-btn">Start Game</button>
+        </form>
+    </dialog>
     <div class="header">
         <h1>Tic-Tac-Toe</h1>
         <div id="info"></div>
+        <button id="new-game-btn">New Game</button>
     </div>
     <div class="game-board">
         
